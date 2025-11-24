@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  username      String?   @unique
+  password      String?   // Nullable for Google OAuth users
+  googleId      String?   @unique
+  firstName     String?
+  lastName      String?
+  avatar        String?
+  isVerified    Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  reviews       Review[]
+
+  @@map("users")
+}
+
+model Brand {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  logo        String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  products    Product[]
+
+  @@map("brands")
+}
+
+model Product {
+  id                    String          @id @default(uuid())
+  name                  String
+  description           String?
+  category              String          // Simple string category as requested
+  price                 Decimal         @db.Decimal(10, 2)
+  promoPrice            Decimal?        @db.Decimal(10, 2)
+  quantity              Int             @default(0)
+  sku                   String          @unique
+  tags                  String[]        // Array of tags
+  additionalInformation String?         @db.Text
+  isActive              Boolean         @default(true)
+  brandId               String?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  // Relations
+  brand                 Brand?          @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  images                ProductImage[]
+  reviews               Review[]
+
+  @@index([brandId])
+  @@index([category])
+  @@index([isActive])
+  @@map("products")
+}
+
+model ProductImage {
+  id          String    @id @default(uuid())
+  url         String
+  altText     String?
+  isPrimary   Boolean   @default(false)
+  displayOrder Int      @default(0)
+  productId   String
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([isPrimary])
+  @@map("product_images")
+}
+
+model Review {
+  id          String    @id @default(uuid())
+  rating      Int       // 1-5 stars
+  comment     String?   @db.Text
+  productId   String
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId]) // One review per user per product
+  @@index([productId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  VENDOR
+}
