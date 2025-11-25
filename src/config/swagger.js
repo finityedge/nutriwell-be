@@ -322,6 +322,10 @@ const options = {
                 description: 'Product review endpoints',
             },
             {
+                name: 'Wishlist',
+                description: 'User wishlist management endpoints',
+            },
+            {
                 name: 'Health',
                 description: 'API health check endpoints',
             },
