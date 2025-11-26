@@ -64,10 +64,10 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DB5E9267D4534FE8994522D735C53BF7 }}
 
       - name: Run Database Migrations
-        run: |
-          npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npx prisma migrate deploy
 
       - name: Seed Database (First Time Only)
         if: vars.RUN_SEED == 'true'
