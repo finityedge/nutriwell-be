@@ -48,11 +48,11 @@ model Wishlist {
   @@map("wishlists")
 }
 
-model Brand {
+model Category {
   id          String    @id @default(uuid())
   name        String    @unique
   description String?
-  logo        String?
+  slug        String    @unique
   isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -60,14 +60,14 @@ model Brand {
   // Relations
   products    Product[]
 
-  @@map("brands")
+  @@map("categories")
 }
 
 model Product {
   id                    String          @id @default(uuid())
   name                  String
   description           String?
-  category              String          // Simple string category as requested
+  brand                 String?         // Simple string field for brand name
   price                 Decimal         @db.Decimal(10, 2)
   promoPrice            Decimal?        @db.Decimal(10, 2)
   quantity              Int             @default(0)
@@ -75,18 +75,18 @@ model Product {
   tags                  String[]        // Array of tags
   additionalInformation String?         @db.Text
   isActive              Boolean         @default(true)
-  brandId               String?
+  categoryId            String?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
   // Relations
-  brand                 Brand?          @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  category              Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   images                ProductImage[]
   reviews               Review[]
   wishlist              Wishlist[]
 
-  @@index([brandId])
-  @@index([category])
+  @@index([categoryId])
+  @@index([brand])
   @@index([isActive])
   @@map("products")
 }

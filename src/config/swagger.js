@@ -185,7 +185,7 @@ const options = {
                         },
                     },
                 },
-                Brand: {
+                Category: {
                     type: 'object',
                     properties: {
                         id: {
@@ -198,9 +198,8 @@ const options = {
                         description: {
                             type: 'string',
                         },
-                        logo: {
+                        slug: {
                             type: 'string',
-                            format: 'uri',
                         },
                         isActive: {
                             type: 'boolean',
@@ -228,7 +227,7 @@ const options = {
                         description: {
                             type: 'string',
                         },
-                        category: {
+                        brand: {
                             type: 'string',
                         },
                         price: {
@@ -255,7 +254,7 @@ const options = {
                         isActive: {
                             type: 'boolean',
                         },
-                        brandId: {
+                        categoryId: {
                             type: 'string',
                             format: 'uuid',
                         },
@@ -310,8 +309,8 @@ const options = {
                 description: 'Authentication and user management endpoints',
             },
             {
-                name: 'Brands',
-                description: 'Brand management endpoints',
+                name: 'Categories',
+                description: 'Category management endpoints',
             },
             {
                 name: 'Products',

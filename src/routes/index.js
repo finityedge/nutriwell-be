@@ -1,6 +1,6 @@
 const express = require('express');
 const authRoutes = require('./auth.routes');
-const brandRoutes = require('./brand.routes');
+const categoryRoutes = require('./category.routes');
 const productRoutes = require('./product.routes');
 const reviewRoutes = require('./review.routes');
 const wishlistRoutes = require('./wishlist.routes');
@@ -44,7 +44,7 @@ router.get('/health', (req, res) => {
  * API Routes
  */
 router.use('/auth', authRoutes);
-router.use('/brands', brandRoutes);
+router.use('/categories', categoryRoutes);
 router.use('/products', productRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/wishlist', wishlistRoutes);
