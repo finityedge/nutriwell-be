@@ -55,6 +55,12 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B125B251199D4BA4A70E028E2A4DA4E9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DB5E9267D4534FE8994522D735C53BF7 }}
 
+      - name: Run Database Migrations
+        run: |
+          npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -62,4 +68,3 @@ jobs:
           app-name: 'nutriwell'
           slot-name: 'Production'
           package: .
-          
