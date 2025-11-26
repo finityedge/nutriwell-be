@@ -48,6 +48,14 @@ jobs:
         with:
           name: node-app
       
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      
+      - name: Install dependencies
+        run: npm install --production
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -58,6 +66,13 @@ jobs:
       - name: Run Database Migrations
         run: |
           npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Seed Database (First Time Only)
+        if: ${{ secrets.RUN_SEED == 'true' }}
+        run: |
+          npm run seed
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
