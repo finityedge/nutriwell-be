@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoutes = require('./auth.routes');
 const categoryRoutes = require('./category.routes');
+const collectionRoutes = require('./collection.routes');
 const productRoutes = require('./product.routes');
 const reviewRoutes = require('./review.routes');
 const wishlistRoutes = require('./wishlist.routes');
@@ -45,6 +46,7 @@ router.get('/health', (req, res) => {
  */
 router.use('/auth', authRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/collections', collectionRoutes);
 router.use('/products', productRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/wishlist', wishlistRoutes);

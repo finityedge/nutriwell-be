@@ -48,6 +48,7 @@ model Wishlist {
   @@map("wishlists")
 }
 
+
 model Category {
   id          String    @id @default(uuid())
   name        String    @unique
@@ -58,9 +59,27 @@ model Category {
   updatedAt   DateTime  @updatedAt
 
   // Relations
-  products    Product[]
+  collections Collection[]
 
   @@map("categories")
+}
+
+model Collection {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  slug        String    @unique
+  isActive    Boolean   @default(true)
+  categoryId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@index([categoryId])
+  @@map("collections")
 }
 
 model Product {
@@ -75,17 +94,17 @@ model Product {
   tags                  String[]        // Array of tags
   additionalInformation String?         @db.Text
   isActive              Boolean         @default(true)
-  categoryId            String?
+  collectionId          String?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
   // Relations
-  category              Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  collection            Collection?     @relation(fields: [collectionId], references: [id], onDelete: SetNull)
   images                ProductImage[]
   reviews               Review[]
   wishlist              Wishlist[]
 
-  @@index([categoryId])
+  @@index([collectionId])
   @@index([brand])
   @@index([isActive])
   @@map("products")

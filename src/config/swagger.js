@@ -214,6 +214,39 @@ const options = {
                         },
                     },
                 },
+                Collection: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
+                        },
+                        name: {
+                            type: 'string',
+                        },
+                        description: {
+                            type: 'string',
+                        },
+                        slug: {
+                            type: 'string',
+                        },
+                        isActive: {
+                            type: 'boolean',
+                        },
+                        categoryId: {
+                            type: 'string',
+                            format: 'uuid',
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                        },
+                    },
+                },
                 Product: {
                     type: 'object',
                     properties: {
@@ -254,7 +287,7 @@ const options = {
                         isActive: {
                             type: 'boolean',
                         },
-                        categoryId: {
+                        collectionId: {
                             type: 'string',
                             format: 'uuid',
                         },
@@ -311,6 +344,10 @@ const options = {
             {
                 name: 'Categories',
                 description: 'Category management endpoints',
+            },
+            {
+                name: 'Collections',
+                description: 'Collection management endpoints',
             },
             {
                 name: 'Products',

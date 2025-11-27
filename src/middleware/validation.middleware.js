@@ -100,10 +100,10 @@ const productValidation = [
         .trim()
         .isLength({ min: 1, max: 100 })
         .withMessage('Brand name must be between 1 and 100 characters'),
-    body('categoryId')
+    body('collectionId')
         .optional()
         .isUUID()
-        .withMessage('Category ID must be a valid UUID'),
+        .withMessage('Collection ID must be a valid UUID'),
     body('price')
         .isFloat({ min: 0 })
         .withMessage('Price must be a positive number'),

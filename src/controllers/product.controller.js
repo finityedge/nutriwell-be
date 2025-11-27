@@ -8,7 +8,7 @@ const getAllProducts = async (req, res) => {
         const {
             page = 1,
             limit = 20,
-            categoryId,
+            collectionId,
             brand,
             minPrice,
             maxPrice,
@@ -21,7 +21,7 @@ const getAllProducts = async (req, res) => {
         // Build where clause
         const where = {
             isActive: true,
-            ...(categoryId && { categoryId }),
+            ...(collectionId && { collectionId }),
             ...(brand && { brand: { contains: brand, mode: 'insensitive' } }),
             ...(minPrice && { price: { gte: parseFloat(minPrice) } }),
             ...(maxPrice && {
@@ -49,10 +49,16 @@ const getAllProducts = async (req, res) => {
                     price: true,
                     promoPrice: true,
                     quantity: true,
-                    category: {
+                    collection: {
                         select: {
                             id: true,
                             name: true,
+                            category: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
                         },
                     },
                     images: {
@@ -74,7 +80,7 @@ const getAllProducts = async (req, res) => {
             name: product.name,
             description: product.description,
             brand: product.brand,
-            category: product.category,
+            collection: product.collection,
             price: product.price,
             promoPrice: product.promoPrice,
             quantity: product.quantity,
@@ -112,11 +118,17 @@ const getProductById = async (req, res) => {
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
-                category: {
+                collection: {
                     select: {
                         id: true,
                         name: true,
                         slug: true,
+                        category: {
+                            select: {
+                                id: true,
+                                name: true,
+                            },
+                        },
                     },
                 },
                 images: {
@@ -209,7 +221,7 @@ const createProduct = async (req, res) => {
                 name,
                 description,
                 brand,
-                categoryId,
+                collectionId,
                 price,
                 promoPrice,
                 quantity,
@@ -227,7 +239,7 @@ const createProduct = async (req, res) => {
             },
             include: {
                 images: true,
-                category: true,
+                collection: true,
             },
         });
 
@@ -299,7 +311,7 @@ const updateProduct = async (req, res) => {
                 ...(name && { name }),
                 ...(description !== undefined && { description }),
                 ...(brand !== undefined && { brand }),
-                ...(categoryId !== undefined && { categoryId }),
+                ...(collectionId !== undefined && { collectionId }),
                 ...(price && { price }),
                 ...(promoPrice !== undefined && { promoPrice }),
                 ...(quantity !== undefined && { quantity }),
@@ -310,7 +322,7 @@ const updateProduct = async (req, res) => {
             },
             include: {
                 images: true,
-                category: true,
+                collection: true,
             },
         });
 
@@ -338,7 +350,7 @@ const updateProduct = async (req, res) => {
             where: { id },
             include: {
                 images: true,
-                category: true,
+                collection: true,
             },
         });
 
