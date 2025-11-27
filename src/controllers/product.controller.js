@@ -8,8 +8,8 @@ const getAllProducts = async (req, res) => {
         const {
             page = 1,
             limit = 20,
-            category,
-            brandId,
+            categoryId,
+            brand,
             minPrice,
             maxPrice,
             search,
@@ -21,8 +21,8 @@ const getAllProducts = async (req, res) => {
         // Build where clause
         const where = {
             isActive: true,
-            ...(category && { category }),
-            ...(brandId && { brandId }),
+            ...(categoryId && { categoryId }),
+            ...(brand && { brand: { contains: brand, mode: 'insensitive' } }),
             ...(minPrice && { price: { gte: parseFloat(minPrice) } }),
             ...(maxPrice && {
                 price: { ...where.price, lte: parseFloat(maxPrice) },
@@ -45,9 +45,16 @@ const getAllProducts = async (req, res) => {
                     id: true,
                     name: true,
                     description: true,
+                    brand: true,
                     price: true,
                     promoPrice: true,
                     quantity: true,
+                    category: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
                     images: {
                         where: { isPrimary: true },
                         take: 1,
@@ -66,6 +73,8 @@ const getAllProducts = async (req, res) => {
             id: product.id,
             name: product.name,
             description: product.description,
+            brand: product.brand,
+            category: product.category,
             price: product.price,
             promoPrice: product.promoPrice,
             quantity: product.quantity,
@@ -103,7 +112,13 @@ const getProductById = async (req, res) => {
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
-                brand: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
                 images: {
                     orderBy: { displayOrder: 'asc' },
                 },
@@ -165,14 +180,14 @@ const createProduct = async (req, res) => {
         const {
             name,
             description,
-            category,
+            brand,
+            categoryId,
             price,
             promoPrice,
             quantity,
             sku,
             tags,
             additionalInformation,
-            brandId,
             images,
         } = req.body;
 
@@ -193,14 +208,14 @@ const createProduct = async (req, res) => {
             data: {
                 name,
                 description,
-                category,
+                brand,
+                categoryId,
                 price,
                 promoPrice,
                 quantity,
                 sku,
                 tags: tags || [],
                 additionalInformation,
-                brandId,
                 images: {
                     create: images?.map((img, index) => ({
                         url: img.url,
@@ -212,7 +227,7 @@ const createProduct = async (req, res) => {
             },
             include: {
                 images: true,
-                brand: true,
+                category: true,
             },
         });
 
@@ -239,14 +254,14 @@ const updateProduct = async (req, res) => {
         const {
             name,
             description,
-            category,
+            brand,
+            categoryId,
             price,
             promoPrice,
             quantity,
             sku,
             tags,
             additionalInformation,
-            brandId,
             isActive,
             images,
         } = req.body;
@@ -283,19 +298,19 @@ const updateProduct = async (req, res) => {
             data: {
                 ...(name && { name }),
                 ...(description !== undefined && { description }),
-                ...(category && { category }),
+                ...(brand !== undefined && { brand }),
+                ...(categoryId !== undefined && { categoryId }),
                 ...(price && { price }),
                 ...(promoPrice !== undefined && { promoPrice }),
                 ...(quantity !== undefined && { quantity }),
                 ...(sku && { sku }),
                 ...(tags && { tags }),
                 ...(additionalInformation !== undefined && { additionalInformation }),
-                ...(brandId !== undefined && { brandId }),
                 ...(isActive !== undefined && { isActive }),
             },
             include: {
                 images: true,
-                brand: true,
+                category: true,
             },
         });
 
@@ -323,7 +338,7 @@ const updateProduct = async (req, res) => {
             where: { id },
             include: {
                 images: true,
-                brand: true,
+                category: true,
             },
         });
 
