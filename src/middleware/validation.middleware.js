@@ -95,10 +95,15 @@ const productValidation = [
         .trim()
         .isLength({ max: 2000 })
         .withMessage('Description must not exceed 2000 characters'),
-    body('category')
+    body('brand')
+        .optional()
         .trim()
-        .notEmpty()
-        .withMessage('Category is required'),
+        .isLength({ min: 1, max: 100 })
+        .withMessage('Brand name must be between 1 and 100 characters'),
+    body('categoryId')
+        .optional()
+        .isUUID()
+        .withMessage('Category ID must be a valid UUID'),
     body('price')
         .isFloat({ min: 0 })
         .withMessage('Price must be a positive number'),
@@ -119,10 +124,6 @@ const productValidation = [
         .optional()
         .isArray()
         .withMessage('Tags must be an array'),
-    body('brandId')
-        .optional()
-        .isUUID()
-        .withMessage('Brand ID must be a valid UUID'),
 ];
 
 /**
