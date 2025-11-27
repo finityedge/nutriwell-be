@@ -33,13 +33,16 @@ const router = express.Router();
  *           type: integer
  *           default: 20
  *       - in: query
- *         name: category
+ *         name: categoryId
  *         schema:
  *           type: string
+ *           format: uuid
+ *         description: Filter by category ID
  *       - in: query
- *         name: brandId
+ *         name: brand
  *         schema:
  *           type: string
+ *         description: Filter by brand name (partial match)
  *       - in: query
  *         name: minPrice
  *         schema:
@@ -96,33 +99,43 @@ router.get('/:id', getProductById);
  *             type: object
  *             required:
  *               - name
- *               - category
  *               - price
  *               - quantity
  *               - sku
  *             properties:
  *               name:
  *                 type: string
+ *                 example: "Vitamin C 1000mg"
  *               description:
  *                 type: string
- *               category:
+ *                 example: "High-quality vitamin C supplement"
+ *               brand:
  *                 type: string
+ *                 example: "Nature's Best"
+ *               categoryId:
+ *                 type: string
+ *                 format: uuid
+ *                 example: "550e8400-e29b-41d4-a716-446655440000"
  *               price:
  *                 type: number
+ *                 example: 29.99
  *               promoPrice:
  *                 type: number
+ *                 example: 24.99
  *               quantity:
  *                 type: integer
+ *                 example: 100
  *               sku:
  *                 type: string
+ *                 example: "VIT-C-1000"
  *               tags:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 example: ["vitamins", "supplements", "immunity"]
  *               additionalInformation:
  *                 type: string
- *               brandId:
- *                 type: string
+ *                 example: "Take one tablet daily with food"
  *               images:
  *                 type: array
  *                 items:
@@ -162,6 +175,48 @@ router.post(
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *               categoryId:
+ *                 type: string
+ *                 format: uuid
+ *               price:
+ *                 type: number
+ *               promoPrice:
+ *                 type: number
+ *               quantity:
+ *                 type: integer
+ *               sku:
+ *                 type: string
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               additionalInformation:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     url:
+ *                       type: string
+ *                     altText:
+ *                       type: string
+ *                     isPrimary:
+ *                       type: boolean
  *     responses:
  *       200:
  *         description: Product updated successfully
