@@ -23,6 +23,8 @@ model User {
   country       String?
   language      String?   @default("en")
   timezone      String?
+  passwordResetToken    String?
+  passwordResetExpires  DateTime?
   isVerified    Boolean   @default(false)
   isActive      Boolean   @default(true)
   role          UserRole  @default(CUSTOMER)

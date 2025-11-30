@@ -1,4 +1,5 @@
 const prisma = require('../config/database');
+const { sendOrderConfirmationEmail, sendOrderStatusEmail } = require('../services/email.service');
 
 /**
  * Generate unique order number
@@ -187,6 +188,13 @@ const createOrder = async (req, res) => {
 
             return newOrder;
         });
+
+        // Send confirmation email asynchronously
+        sendOrderConfirmationEmail(
+            order.contactEmail,
+            order,
+            order.contactFirstName
+        ).catch(err => console.error('Failed to send order confirmation email:', err));
 
         res.status(201).json({
             success: true,
@@ -386,6 +394,13 @@ const cancelOrder = async (req, res) => {
             return cancelled;
         });
 
+        // Send cancellation email
+        sendOrderStatusEmail(
+            order.contactEmail,
+            updatedOrder,
+            order.contactFirstName
+        ).catch(err => console.error('Failed to send order cancellation email:', err));
+
         res.json({
             success: true,
             message: 'Order cancelled successfully',
@@ -443,6 +458,13 @@ const updateOrderStatus = async (req, res) => {
             where: { id },
             data: { status }
         });
+
+        // Send status update email
+        sendOrderStatusEmail(
+            order.contactEmail,
+            updatedOrder,
+            order.contactFirstName
+        ).catch(err => console.error('Failed to send order status email:', err));
 
         res.json({
             success: true,
