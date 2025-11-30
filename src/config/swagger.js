@@ -427,6 +427,10 @@ const options = {
                 description: 'Order management endpoints',
             },
             {
+                name: 'Deals',
+                description: 'Product deals management endpoints',
+            },
+            {
                 name: 'Health',
                 description: 'API health check endpoints',
             },

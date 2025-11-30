@@ -7,6 +7,7 @@ const productRoutes = require('./product.routes');
 const reviewRoutes = require('./review.routes');
 const wishlistRoutes = require('./wishlist.routes');
 const orderRoutes = require('./order.routes');
+const dealRoutes = require('./deal.routes');
 
 const router = express.Router();
 
@@ -54,6 +55,7 @@ router.use('/products', productRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/wishlist', wishlistRoutes);
 router.use('/orders', orderRoutes);
+router.use('/deals', dealRoutes);
 
 /**
  * 404 handler for API routes
