@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoutes = require('./auth.routes');
+const userRoutes = require('./user.routes');
 const categoryRoutes = require('./category.routes');
 const collectionRoutes = require('./collection.routes');
 const productRoutes = require('./product.routes');
@@ -46,6 +47,7 @@ router.get('/health', (req, res) => {
  * API Routes
  */
 router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/collections', collectionRoutes);
 router.use('/products', productRoutes);

@@ -66,6 +66,22 @@ const options = {
                             format: 'uri',
                             description: 'User avatar URL',
                         },
+                        gender: {
+                            type: 'string',
+                            description: 'User gender',
+                        },
+                        country: {
+                            type: 'string',
+                            description: 'User country',
+                        },
+                        language: {
+                            type: 'string',
+                            description: 'User preferred language',
+                        },
+                        timezone: {
+                            type: 'string',
+                            description: 'User timezone',
+                        },
                         role: {
                             type: 'string',
                             enum: ['CUSTOMER', 'ADMIN', 'VENDOR'],
@@ -381,6 +397,10 @@ const options = {
             {
                 name: 'Authentication',
                 description: 'Authentication and user management endpoints',
+            },
+            {
+                name: 'Users',
+                description: 'User profile management endpoints',
             },
             {
                 name: 'Categories',

@@ -19,6 +19,10 @@ model User {
   firstName     String?
   lastName      String?
   avatar        String?
+  gender        String?
+  country       String?
+  language      String?   @default("en")
+  timezone      String?
   isVerified    Boolean   @default(false)
   isActive      Boolean   @default(true)
   role          UserRole  @default(CUSTOMER)
