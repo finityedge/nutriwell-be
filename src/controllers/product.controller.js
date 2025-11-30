@@ -194,6 +194,7 @@ const createProduct = async (req, res) => {
             description,
             brand,
             categoryId,
+            collectionId,
             price,
             promoPrice,
             quantity,

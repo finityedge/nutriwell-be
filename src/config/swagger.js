@@ -22,7 +22,7 @@ const options = {
                 description: 'Development server',
             },
             {
-                url: 'https://api.nutriwell.com',
+                url: 'https://nutriwell.azurewebsites.net',
                 description: 'Production server',
             },
         ],
