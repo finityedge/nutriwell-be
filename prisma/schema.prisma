@@ -28,6 +28,7 @@ model User {
   // Relations
   reviews       Review[]
   wishlist      Wishlist[]
+  orders        Order[]
 
   @@map("users")
 }
@@ -103,6 +104,7 @@ model Product {
   images                ProductImage[]
   reviews               Review[]
   wishlist              Wishlist[]
+  orderItems            OrderItem[]
 
   @@index([collectionId])
   @@index([brand])
@@ -146,8 +148,103 @@ model Review {
   @@map("reviews")
 }
 
+model Order {
+  id                  String         @id @default(uuid())
+  orderNumber         String         @unique
+  userId              String
+  status              OrderStatus    @default(PENDING)
+
+  // Pricing
+  subtotal            Decimal        @db.Decimal(10, 2)
+  shippingFee         Decimal        @db.Decimal(10, 2) @default(0)
+  tax                 Decimal        @db.Decimal(10, 2) @default(0)
+  total               Decimal        @db.Decimal(10, 2)
+
+  // Contact Info
+  contactFirstName    String
+  contactLastName     String
+  contactPhone        String
+  contactEmail        String
+
+  // Delivery
+  deliveryMethod      DeliveryMethod
+
+  // Shipping Address (only for DELIVERY)
+  shippingCountry     String?
+  shippingRegion      String?
+  shippingAddress     String?
+  shippingAddress2    String?
+  deliveryDate        DateTime?
+  convenientTime      String?
+
+  // Payment
+  paymentMethod       PaymentMethod
+  paymentStatus       PaymentStatus  @default(PENDING)
+
+  // Notes
+  deliveryNote        String?        @db.Text
+
+  // Timestamps
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  // Relations
+  user                User           @relation(fields: [userId], references: [id])
+  items               OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  orderId         String
+  productId       String
+  productName     String
+  productBrand    String?
+  quantity        Int
+  price           Decimal  @db.Decimal(10, 2)
+  subtotal        Decimal  @db.Decimal(10, 2)
+
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product  @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
 enum UserRole {
   CUSTOMER
   ADMIN
   VENDOR
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum DeliveryMethod {
+  STORE_PICKUP
+  DELIVERY
+}
+
+enum PaymentMethod {
+  CARD
+  CASH_ON_DELIVERY
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
 }

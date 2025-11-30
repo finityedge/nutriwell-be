@@ -5,6 +5,7 @@ const collectionRoutes = require('./collection.routes');
 const productRoutes = require('./product.routes');
 const reviewRoutes = require('./review.routes');
 const wishlistRoutes = require('./wishlist.routes');
+const orderRoutes = require('./order.routes');
 
 const router = express.Router();
 
@@ -50,6 +51,7 @@ router.use('/collections', collectionRoutes);
 router.use('/products', productRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/wishlist', wishlistRoutes);
+router.use('/orders', orderRoutes);
 
 /**
  * 404 handler for API routes

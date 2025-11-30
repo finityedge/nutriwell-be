@@ -334,6 +334,47 @@ const options = {
                         },
                     },
                 },
+                Order: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
+                        },
+                        orderNumber: {
+                            type: 'string',
+                        },
+                        userId: {
+                            type: 'string',
+                            format: 'uuid',
+                        },
+                        status: {
+                            type: 'string',
+                            enum: ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'],
+                        },
+                        subtotal: {
+                            type: 'number',
+                        },
+                        shippingFee: {
+                            type: 'number',
+                        },
+                        total: {
+                            type: 'number',
+                        },
+                        deliveryMethod: {
+                            type: 'string',
+                            enum: ['STORE_PICKUP', 'DELIVERY'],
+                        },
+                        paymentMethod: {
+                            type: 'string',
+                            enum: ['CARD', 'CASH_ON_DELIVERY', 'BANK_TRANSFER'],
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                        },
+                    },
+                },
             },
         },
         tags: [
@@ -360,6 +401,10 @@ const options = {
             {
                 name: 'Wishlist',
                 description: 'User wishlist management endpoints',
+            },
+            {
+                name: 'Orders',
+                description: 'Order management endpoints',
             },
             {
                 name: 'Health',
